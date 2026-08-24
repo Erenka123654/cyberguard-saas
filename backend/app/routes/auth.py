@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 from app.db import get_conn
 from app.security import hash_password, verify_password, create_token
+from app.rate_limit import rate_limit
 
 router = APIRouter()
 
@@ -15,7 +16,8 @@ class Login(BaseModel):
     password: str
 
 @router.post("/register")
-def register(data: Register):
+def register(data: Register, request: Request):
+    rate_limit(request, "register", max_attempts=5, window_seconds=60)
     conn = get_conn()
     try:
         cur = conn.cursor()
@@ -32,7 +34,8 @@ def register(data: Register):
         conn.close()
 
 @router.post("/login")
-def login(data: Login):
+def login(data: Login, request: Request):
+    rate_limit(request, "login", max_attempts=8, window_seconds=60)
     conn = get_conn()
     row = conn.execute("SELECT * FROM users WHERE email=?", (data.email.lower(),)).fetchone()
     conn.close()
