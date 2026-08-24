@@ -3,7 +3,8 @@ uvicorn[standard]
 httpx
 dnspython
 PyJWT
-passlib[bcrypt]
+passlib
+bcrypt==4.0.1
 pydantic-settings
 reportlab
 python-multipart
