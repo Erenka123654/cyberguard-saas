@@ -39,3 +39,20 @@ def history(user=Depends(current_user)):
       (user["id"],)).fetchall()
     conn.close()
     return [dict(x) for x in rows]
+
+@router.get("/{scan_id}")
+def scan_detail(scan_id: int, user=Depends(current_user)):
+    conn = get_conn()
+    row = conn.execute("""SELECT s.id,d.domain,s.status,s.score,s.findings_count,
+      s.result_json,s.started_at,s.completed_at FROM scans s JOIN domains d ON d.id=s.domain_id
+      JOIN users u ON u.organization_id=d.organization_id WHERE s.id=? AND u.id=?""",
+      (scan_id, user["id"])).fetchone()
+    conn.close()
+    if not row:
+        raise HTTPException(404, "Scan not found")
+    result = json.loads(row["result_json"] or "{}")
+    return {"id": row["id"], "domain": row["domain"], "status": row["status"],
+            "score": row["score"], "findings_count": row["findings_count"],
+            "started_at": row["started_at"], "completed_at": row["completed_at"],
+            "findings": result.get("findings", []), "dns": result.get("dns", {}),
+            "ip": result.get("ip"), "http_status": result.get("http_status")}

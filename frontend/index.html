@@ -8,72 +8,89 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app">
+
+<div class="authscreen" id="authscreen">
+  <div class="modalbox">
+    <div class="modal-logo">C</div>
+    <h2 id="authTitle">Sign in to CyberGuard</h2>
+    <p id="authSubtitle">Enter your credentials to access your security dashboard.</p>
+
+    <div id="authRegisterFields" class="hidden">
+      <label>Organization<input id="authOrg" placeholder="Acme Security"></label>
+    </div>
+    <label>Email<input id="authEmail" type="email" placeholder="you@company.com"></label>
+    <label>Password<input id="authPassword" type="password" placeholder="••••••••"></label>
+
+    <button class="primary full" id="authSubmit">Sign in</button>
+    <small id="authError" class="autherror hidden"></small>
+    <p class="authswitch">
+      <span id="authSwitchText">Don't have an account?</span>
+      <a id="authSwitchLink">Create one</a>
+    </p>
+  </div>
+</div>
+
+<div class="app hidden" id="appRoot">
 <aside class="sidebar">
   <div class="brand"><div class="logo">C</div><div><b>CYBER<span>GUARD</span></b><small>SECURITY PLATFORM</small></div></div>
-  <div class="workspace"><i></i> Acme Security <b>⌄</b></div>
+  <div class="workspace"><i></i> <span id="orgName">—</span> <b>⌄</b></div>
   <nav>
     <label>MAIN</label>
     <a class="active" data-page="dashboard">▦ <span>Dashboard</span></a>
-    <a data-page="domains">◈ <span>Domains</span><em>12</em></a>
+    <a data-page="domains">◈ <span>Domains</span><em id="navDomainsCount">0</em></a>
     <a data-page="scans">◉ <span>Scans</span></a>
-    <a data-page="findings">⚠ <span>Findings</span><em class="red">7</em></a>
+    <a data-page="findings">⚠ <span>Findings</span><em class="red" id="navFindingsCount">0</em></a>
     <label>MANAGEMENT</label>
     <a data-page="reports">▤ <span>Reports</span></a>
     <a data-page="admin">◫ <span>Admin</span></a>
     <a data-page="settings">⚙ <span>Settings</span></a>
   </nav>
   <div class="support"><div>?</div><span><b>Security support</b><small>We're here to help</small></span></div>
+  <button class="logout" id="logoutBtn">⎋ Log out</button>
 </aside>
 <main>
 <header><button class="mobile-menu">☰</button><div class="crumb">Security Operations / <b id="title">Dashboard</b></div>
-<div class="actions"><button>⌕</button><button>♧</button><div class="avatar">EK</div><div class="profile"><b>Eren Karaca</b><small>Administrator</small></div></div></header>
+<div class="actions"><button>⌕</button><button>♧</button><div class="avatar" id="userInitials">—</div><div class="profile"><b id="userEmail">—</b><small id="userRole">Customer</small></div></div></header>
 <section class="content">
 
 <div class="page" id="dashboard">
 <div class="head"><div><h1>Security Overview</h1><p>Monitor and improve your organization's security posture.</p></div><button class="primary newscan">＋ New Scan</button></div>
-<div class="notice"><strong>!</strong><div><b>7 security findings require your attention</b><span>Prioritize critical and high severity findings.</span></div><button data-go="findings">Review findings →</button></div>
+<div class="notice hidden" id="dashNotice"><strong>!</strong><div><b id="dashNoticeText">—</b><span>Prioritize critical and high severity findings.</span></div><button data-go="findings">Review findings →</button></div>
 <div class="cards">
-<div class="card score"><div class="top"><span>SECURITY SCORE</span><b>↑ 8.4%</b></div><div class="scorebody"><div class="ring"><span><strong>87</strong><small>/100</small></span></div><div><h3>Good</h3><p>Better than 82% of monitored assets.</p></div></div><footer>Last scan <b>Today, 10:42</b></footer></div>
-<div class="card metric"><i class="critical">!</i><span>Critical</span><strong>2</strong><small>↓ 1 from last week</small></div>
-<div class="card metric"><i class="high">↑</i><span>High</span><strong>5</strong><small>↑ 2 from last week</small></div>
-<div class="card metric"><i class="medium">•</i><span>Medium</span><strong>8</strong><small>↓ 4 from last week</small></div>
-<div class="card metric"><i class="low">✓</i><span>Low</span><strong>12</strong><small>↓ 7 from last week</small></div>
+<div class="card score"><div class="top"><span>SECURITY SCORE</span><b id="dashScoreLabel">—</b></div><div class="scorebody"><div class="ring" id="dashRing"><span><strong id="dashScore">–</strong><small>/100</small></span></div><div><h3 id="dashScoreWord">—</h3><p id="dashScoreDesc">Henüz tarama yapılmadı.</p></div></div><footer>Last scan <b id="dashLastScan">—</b></footer></div>
+<div class="card metric"><i class="critical">!</i><span>Critical</span><strong id="cntCritical">0</strong></div>
+<div class="card metric"><i class="high">↑</i><span>High</span><strong id="cntHigh">0</strong></div>
+<div class="card metric"><i class="medium">•</i><span>Medium</span><strong id="cntMedium">0</strong></div>
+<div class="card metric"><i class="low">✓</i><span>Low</span><strong id="cntLow">0</strong></div>
 </div>
 <div class="columns">
-<div class="card chart"><div class="section-title"><div><h2>Security Score</h2><p>Last 30 days</p></div><select><option>Last 30 days</option></select></div><svg viewBox="0 0 700 250" preserveAspectRatio="none"><path class="fill" d="M0 190 L55 170 L110 180 L165 145 L220 158 L275 130 L330 138 L385 110 L440 120 L495 95 L550 110 L610 65 L700 45 L700 250 L0 250Z"/><path class="curve" d="M0 190 L55 170 L110 180 L165 145 L220 158 L275 130 L330 138 L385 110 L440 120 L495 95 L550 110 L610 65 L700 45"/></svg><div class="dates"><span>Jul 26</span><span>Aug 02</span><span>Aug 09</span><span>Aug 16</span><span>Aug 24</span></div></div>
-<div class="card posture"><div class="section-title"><div><h2>Security Posture</h2><p>Across all monitored assets</p></div><b>•••</b></div><div class="posture-score">87%</div><div class="progress"><i></i></div><div class="legend"><span>● Secure <b>68%</b></span><span>● Attention <b>24%</b></span><span>● Critical <b>8%</b></span></div></div>
+<div class="card chart"><div class="section-title"><div><h2>Security Score</h2><p>Last scans</p></div></div><svg viewBox="0 0 700 250" preserveAspectRatio="none" id="scoreChart"></svg><div class="dates" id="scoreChartDates"></div></div>
+<div class="card posture"><div class="section-title"><div><h2>Security Posture</h2><p>Across all monitored assets</p></div><b>•••</b></div><div class="posture-score" id="postureScore">—%</div><div class="progress"><i id="postureBar"></i></div><div class="legend"><span>● Secure <b id="postureSecure">0%</b></span><span>● Attention <b id="postureAttention">0%</b></span><span>● Critical <b id="postureCritical">0%</b></span></div></div>
 </div>
 <div class="card table"><div class="section-title"><div><h2>Recent Scans</h2><p>Your latest security assessments</p></div><button class="link" data-go="scans">View all →</button></div>
 <table><thead><tr><th>DOMAIN</th><th>STATUS</th><th>SCORE</th><th>FINDINGS</th><th>LAST SCAN</th></tr></thead>
-<tbody><tr><td><b>example.com</b></td><td><span class="badge green">Completed</span></td><td>94</td><td>2</td><td>Today, 10:42</td></tr>
-<tr><td><b>shop.example.com</b></td><td><span class="badge green">Completed</span></td><td>81</td><td>7</td><td>Yesterday</td></tr>
-<tr><td><b>api.example.com</b></td><td><span class="badge yellow">Warning</span></td><td>72</td><td>11</td><td>Aug 22</td></tr></tbody></table></div>
+<tbody id="dashRecentScans"><tr><td colspan="5">Yükleniyor…</td></tr></tbody></table></div>
 </div>
 
-<div class="page hidden" id="domains"><div class="head"><div><h1>Domains</h1><p>Manage monitored and authorized assets.</p></div><button class="primary newscan">＋ Add Domain</button></div><div class="card table"><table><thead><tr><th>DOMAIN</th><th>STATUS</th><th>SCORE</th><th>LAST SCAN</th><th>ACTION</th></tr></thead><tbody>
-<tr><td><b>example.com</b><small>Production</small></td><td><span class="badge green">● Monitored</span></td><td>94</td><td>Today</td><td><button class="small">Scan</button></td></tr>
-<tr><td><b>shop.example.com</b><small>E-commerce</small></td><td><span class="badge green">● Monitored</span></td><td>81</td><td>Yesterday</td><td><button class="small">Scan</button></td></tr>
-<tr><td><b>api.example.com</b><small>API</small></td><td><span class="badge yellow">● Attention</span></td><td>72</td><td>Aug 22</td><td><button class="small">Scan</button></td></tr></tbody></table></div></div>
+<div class="page hidden" id="domains"><div class="head"><div><h1>Domains</h1><p>Manage monitored and authorized assets.</p></div><button class="primary newscan">＋ Add Domain</button></div><div class="card table"><table><thead><tr><th>DOMAIN</th><th>STATUS</th><th>ADDED</th><th>ACTION</th></tr></thead><tbody id="domainsBody">
+<tr><td colspan="4">Yükleniyor…</td></tr></tbody></table></div></div>
 
 <div class="page hidden" id="scans"><div class="head"><div><h1>Scan History</h1><p>Security assessment activity.</p></div><button class="primary newscan">＋ New Scan</button></div>
-<div class="mini"><div class="card"><span>SCANS THIS MONTH</span><strong>42</strong><b>↑ 18%</b></div><div class="card"><span>AVERAGE SCORE</span><strong>84.6</strong><b>↑ 5.2</b></div><div class="card"><span>LAST SCAN</span><strong>10:42</strong><small>Today</small></div></div>
-<div class="card table"><table><thead><tr><th>DOMAIN</th><th>TYPE</th><th>STATUS</th><th>SCORE</th><th>DATE</th></tr></thead><tbody><tr><td><b>example.com</b></td><td>Full assessment</td><td><span class="badge green">Completed</span></td><td>94</td><td>Today</td></tr><tr><td><b>shop.example.com</b></td><td>Quick scan</td><td><span class="badge green">Completed</span></td><td>81</td><td>Yesterday</td></tr></tbody></table></div></div>
+<div class="mini"><div class="card"><span>TOTAL SCANS</span><strong id="statTotalScans">0</strong></div><div class="card"><span>AVERAGE SCORE</span><strong id="statAvgScore">—</strong></div><div class="card"><span>LAST SCAN</span><strong id="statLastScan">—</strong></div></div>
+<div class="card table"><table><thead><tr><th>DOMAIN</th><th>STATUS</th><th>SCORE</th><th>FINDINGS</th><th>DATE</th></tr></thead><tbody id="scansBody"><tr><td colspan="5">Yükleniyor…</td></tr></tbody></table></div></div>
 
-<div class="page hidden" id="findings"><div class="head"><div><h1>Security Findings</h1><p>Prioritized issues across monitored assets.</p></div></div>
-<div class="finding card"><span class="severity crit">CRITICAL</span><div><h3>Exposed administrative endpoint</h3><p>Administrative interface is accessible without network restriction.</p><small>example.com · Detected today</small></div><b>→</b></div>
-<div class="finding card"><span class="severity highbg">HIGH</span><div><h3>Missing Content-Security-Policy</h3><p>The application does not define a Content-Security-Policy response header.</p><small>shop.example.com · Detected today</small></div><b>→</b></div>
-<div class="finding card"><span class="severity highbg">HIGH</span><div><h3>Weak TLS configuration</h3><p>TLS configuration should be reviewed and hardened.</p><small>api.example.com · Detected yesterday</small></div><b>→</b></div></div>
+<div class="page hidden" id="findings"><div class="head"><div><h1>Security Findings</h1><p>Prioritized issues from your most recent scans.</p></div></div>
+<div id="findingsBody"><p class="empty">Yükleniyor…</p></div></div>
 
-<div class="page hidden" id="reports"><div class="head"><div><h1>Reports</h1><p>Security assessment reports.</p></div><button class="primary">＋ Generate Report</button></div>
-<div class="report card"><div class="pdf">PDF</div><div><h3>example.com — Security Assessment</h3><p>24 Aug 2026 · Score 94/100</p></div><button class="small">Download</button></div>
-<div class="report card"><div class="pdf">PDF</div><div><h3>shop.example.com — Security Assessment</h3><p>23 Aug 2026 · Score 81/100</p></div><button class="small">Download</button></div></div>
+<div class="page hidden" id="reports"><div class="head"><div><h1>Reports</h1><p>Security assessment reports.</p></div></div>
+<div id="reportsBody"><p class="empty">Yükleniyor…</p></div></div>
 
-<div class="page hidden" id="admin"><div class="head"><div><h1>Admin Overview</h1><p>Platform-wide operational metrics.</p></div></div><div class="mini"><div class="card"><span>USERS</span><strong>128</strong></div><div class="card"><span>DOMAINS</span><strong>342</strong></div><div class="card"><span>SCANS</span><strong>4,281</strong></div></div><div class="card admin"><h2>Platform health</h2><p>API: <b>Operational</b> · Scanner: <b>Operational</b> · Database: <b>Operational</b></p></div></div>
+<div class="page hidden" id="admin"><div class="head"><div><h1>Admin Overview</h1><p>Platform-wide operational metrics.</p></div></div><div id="adminBody"><p class="empty">Yükleniyor…</p></div></div>
 
-<div class="page hidden" id="settings"><div class="head"><div><h1>Settings</h1><p>Workspace and notification preferences.</p></div></div><div class="settings"><div class="card"><h2>Workspace</h2><label>Workspace name<input value="Acme Security"></label><label>Security contact<input value="security@acme.example"></label><button class="primary">Save changes</button></div><div class="card"><h2>Notifications</h2><label class="toggle"><span><b>Critical findings</b><small>Notify immediately for critical issues.</small></span><input type="checkbox" checked></label><label class="toggle"><span><b>Weekly report</b><small>Receive a weekly security posture summary.</small></span><input type="checkbox" checked></label></div></div></div>
+<div class="page hidden" id="settings"><div class="head"><div><h1>Settings</h1><p>Workspace and notification preferences.</p></div></div><div class="settings"><div class="card"><h2>Workspace</h2><label>Organization<input id="settingsOrg" disabled></label><label>Account email<input id="settingsEmail" disabled></label><small class="hint">Bu bilgiler şu an salt-okunur — düzenleme için backend'e bir /api/settings uç noktası eklenmesi gerekiyor.</small></div></div></div>
 
 </section></main></div>
 <div class="modal hidden" id="modal"><div class="modalbox"><button class="close">×</button><div class="modal-logo">C</div><h2>Start a security scan</h2><p>Scan an authorized domain for defensive configuration issues.</p><label>Domain<input id="domain" placeholder="example.com"></label><label class="check"><input id="authorized" type="checkbox"> I confirm I am authorized to scan this domain.</label><button class="primary full" id="start">Start scan</button><small id="status"></small></div></div>
+<script src="config.js"></script>
 <script src="app.js"></script>
 </body></html>
