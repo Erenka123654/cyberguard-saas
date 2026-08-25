@@ -22,10 +22,11 @@ def add_domain(data: DomainIn, user=Depends(current_user)):
         raise HTTPException(422, "Invalid domain")
     conn = get_conn()
     org = conn.execute("SELECT organization_id FROM users WHERE id=?", (user["id"],)).fetchone()
-    conn.execute("INSERT INTO domains(organization_id,domain,authorized) VALUES(?,?,1)",
+    cur = conn.execute("INSERT INTO domains(organization_id,domain,authorized) VALUES(?,?,1)",
                  (org["organization_id"], domain))
+    domain_id = cur.lastrowid
     conn.commit(); conn.close()
-    return {"message":"Domain added","domain":domain}
+    return {"message":"Domain added","domain":domain,"id":domain_id}
 
 @router.get("")
 def list_domains(user=Depends(current_user)):
