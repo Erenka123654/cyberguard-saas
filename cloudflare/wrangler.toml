@@ -12,4 +12,4 @@ ENVIRONMENT = "production"
 [[d1_databases]]
 binding = "DB"
 database_name = "cyberguard-db"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "eff718ac-6868-423a-b2a5-bda1a8e6ce37"
