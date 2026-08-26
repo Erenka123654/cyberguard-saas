@@ -1,87 +1,96 @@
 <!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>CyberGuard</title>
-  <link rel="stylesheet" href="./style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CyberGuard — Security Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="shell">
-    <section id="authscreen" class="card auth">
-      <div class="brand"><span class="logo">C</span><div><b>CyberGuard</b><small>Cloudflare Security Platform</small></div></div>
-      <h1 id="authTitle">CyberGuard'a giriş yap</h1>
-      <p id="authSubtitle">Güvenlik paneline erişmek için bilgilerinizi girin.</p>
-      <div id="authError" class="error hidden"></div>
-      <label>E-posta<input id="authEmail" type="email" autocomplete="email"></label>
-      <label>Şifre<input id="authPassword" type="password" autocomplete="current-password"></label>
-      <div id="authRegisterFields" class="hidden">
-        <label>Organizasyon<input id="authOrg" type="text" placeholder="Şirketiniz"></label>
-      </div>
-      <button id="authSubmit">Giriş yap</button>
-      <button id="authSwitchLink" class="link">Hesap oluştur</button>
-      <p id="apiStatus" class="muted"></p>
-    </section>
 
-    <section id="appRoot" class="hidden">
-      <header class="topbar">
-        <div class="brand"><span class="logo">C</span><div><b>CyberGuard</b><small>Cloudflare Edition</small></div></div>
-        <div class="user"><span id="userEmail"></span><button id="logoutBtn" class="ghost">Çıkış</button></div>
-      </header>
+<div class="authscreen" id="authscreen">
+  <div class="modalbox">
+    <div class="modal-logo">C</div>
+    <h2 id="authTitle">Sign in to CyberGuard</h2>
+    <p id="authSubtitle">Enter your credentials to access your security dashboard.</p>
 
-      <div class="grid">
-        <aside class="card sidebar">
-          <button class="nav active" data-page="dashboard">Dashboard</button>
-          <button class="nav" data-page="domains">Domainler</button>
-          <button class="nav" data-page="scans">Taramalar</button>
-          <button class="nav" data-page="findings">Bulgular</button>
-          <button class="nav" data-page="admin">Admin</button>
-        </aside>
+    <div id="authRegisterFields" class="hidden">
+      <label>Organization<input id="authOrg" placeholder="Acme Security"></label>
+    </div>
+    <label>Email<input id="authEmail" type="email" placeholder="you@company.com"></label>
+    <label>Password<input id="authPassword" type="password" placeholder="••••••••"></label>
 
-        <section class="content">
-          <div id="page-dashboard" class="page">
-            <div class="pagehead"><div><h2>Security Dashboard</h2><p>Web varlıklarınızın güvenlik durumunu izleyin.</p></div></div>
-            <div class="cards">
-              <div class="stat"><span>Domain</span><strong id="statDomains">0</strong></div>
-              <div class="stat"><span>Tarama</span><strong id="statScans">0</strong></div>
-              <div class="stat"><span>Ortalama skor</span><strong id="statScore">—</strong></div>
-              <div class="stat"><span>Bulgu</span><strong id="statFindings">0</strong></div>
-            </div>
-            <div class="card panel">
-              <h3>Son taramalar</h3>
-              <div class="tablewrap"><table><thead><tr><th>Domain</th><th>Durum</th><th>Skor</th><th>Bulgu</th><th>Tarih</th></tr></thead><tbody id="scanTable"></tbody></table></div>
-            </div>
-          </div>
+    <button class="primary full" id="authSubmit">Sign in</button>
+    <small id="authError" class="autherror hidden"></small>
+    <p class="authswitch">
+      <span id="authSwitchText">Don't have an account?</span>
+      <a id="authSwitchLink">Create one</a>
+    </p>
+  </div>
+</div>
 
-          <div id="page-domains" class="page hidden">
-            <div class="pagehead"><div><h2>Domainler</h2><p>Sadece size ait/izinli domainleri tarayın.</p></div></div>
-            <div class="card panel formrow">
-              <input id="domainInput" placeholder="example.com">
-              <label class="check"><input id="domainAuthorized" type="checkbox"> Bu domaini tarama yetkim var</label>
-              <button id="addDomain">Domain ekle</button>
-            </div>
-            <div class="card panel tablewrap"><table><thead><tr><th>Domain</th><th>Yetki</th><th>Tarih</th><th></th></tr></thead><tbody id="domainTable"></tbody></table></div>
-          </div>
+<div class="app hidden" id="appRoot">
+<aside class="sidebar">
+  <div class="brand"><div class="logo">C</div><div><b>CYBER<span>GUARD</span></b><small>SECURITY PLATFORM</small></div></div>
+  <div class="workspace"><i></i> <span id="orgName">—</span> <b>⌄</b></div>
+  <nav>
+    <label>MAIN</label>
+    <a class="active" data-page="dashboard">▦ <span>Dashboard</span></a>
+    <a data-page="domains">◈ <span>Domains</span><em id="navDomainsCount">0</em></a>
+    <a data-page="scans">◉ <span>Scans</span></a>
+    <a data-page="findings">⚠ <span>Findings</span><em class="red" id="navFindingsCount">0</em></a>
+    <label>MANAGEMENT</label>
+    <a data-page="reports">▤ <span>Reports</span></a>
+    <a data-page="admin">◫ <span>Admin</span></a>
+    <a data-page="settings">⚙ <span>Settings</span></a>
+  </nav>
+  <div class="support"><div>?</div><span><b>Security support</b><small>We're here to help</small></span></div>
+  <button class="logout" id="logoutBtn">⎋ Log out</button>
+</aside>
+<main>
+<header><button class="mobile-menu">☰</button><div class="crumb">Security Operations / <b id="title">Dashboard</b></div>
+<div class="actions"><button>⌕</button><button>♧</button><div class="avatar" id="userInitials">—</div><div class="profile"><b id="userEmail">—</b><small id="userRole">Customer</small></div></div></header>
+<section class="content">
 
-          <div id="page-scans" class="page hidden">
-            <div class="pagehead"><div><h2>Taramalar</h2><p>Gerçek zamanlı güvenlik kontrolleri.</p></div></div>
-            <div class="card panel tablewrap"><table><thead><tr><th>Domain</th><th>Durum</th><th>Skor</th><th>Bulgu</th><th>Tarih</th><th></th></tr></thead><tbody id="allScanTable"></tbody></table></div>
-          </div>
+<div class="page" id="dashboard">
+<div class="head"><div><h1>Security Overview</h1><p>Monitor and improve your organization's security posture.</p></div><button class="primary newscan">＋ New Scan</button></div>
+<div class="notice hidden" id="dashNotice"><strong>!</strong><div><b id="dashNoticeText">—</b><span>Prioritize critical and high severity findings.</span></div><button data-go="findings">Review findings →</button></div>
+<div class="cards">
+<div class="card score"><div class="top"><span>SECURITY SCORE</span><b id="dashScoreLabel">—</b></div><div class="scorebody"><div class="ring" id="dashRing"><span><strong id="dashScore">–</strong><small>/100</small></span></div><div><h3 id="dashScoreWord">—</h3><p id="dashScoreDesc">Henüz tarama yapılmadı.</p></div></div><footer>Last scan <b id="dashLastScan">—</b></footer></div>
+<div class="card metric"><i class="critical">!</i><span>Critical</span><strong id="cntCritical">0</strong></div>
+<div class="card metric"><i class="high">↑</i><span>High</span><strong id="cntHigh">0</strong></div>
+<div class="card metric"><i class="medium">•</i><span>Medium</span><strong id="cntMedium">0</strong></div>
+<div class="card metric"><i class="low">✓</i><span>Low</span><strong id="cntLow">0</strong></div>
+</div>
+<div class="columns">
+<div class="card chart"><div class="section-title"><div><h2>Security Score</h2><p>Last scans</p></div></div><svg viewBox="0 0 700 250" preserveAspectRatio="none" id="scoreChart"></svg><div class="dates" id="scoreChartDates"></div></div>
+<div class="card posture"><div class="section-title"><div><h2>Security Posture</h2><p>Across all monitored assets</p></div><b>•••</b></div><div class="posture-score" id="postureScore">—%</div><div class="progress"><i id="postureBar"></i></div><div class="legend"><span>● Secure <b id="postureSecure">0%</b></span><span>● Attention <b id="postureAttention">0%</b></span><span>● Critical <b id="postureCritical">0%</b></span></div></div>
+</div>
+<div class="card table"><div class="section-title"><div><h2>Recent Scans</h2><p>Your latest security assessments</p></div><button class="link" data-go="scans">View all →</button></div>
+<table><thead><tr><th>DOMAIN</th><th>STATUS</th><th>SCORE</th><th>FINDINGS</th><th>LAST SCAN</th></tr></thead>
+<tbody id="dashRecentScans"><tr><td colspan="5">Yükleniyor…</td></tr></tbody></table></div>
+</div>
 
-          <div id="page-findings" class="page hidden">
-            <div class="pagehead"><div><h2>Güvenlik Bulguları</h2><p>Son tamamlanan taramalardan elde edilen bulgular.</p></div></div>
-            <div id="findingsList"></div>
-          </div>
+<div class="page hidden" id="domains"><div class="head"><div><h1>Domains</h1><p>Manage monitored and authorized assets.</p></div><button class="primary newscan">＋ Add Domain</button></div><div class="card table"><table><thead><tr><th>DOMAIN</th><th>STATUS</th><th>ADDED</th><th>ACTION</th></tr></thead><tbody id="domainsBody">
+<tr><td colspan="4">Yükleniyor…</td></tr></tbody></table></div></div>
 
-          <div id="page-admin" class="page hidden">
-            <div class="pagehead"><div><h2>Admin</h2><p>Platform özeti.</p></div></div>
-            <div id="adminBox" class="cards"></div>
-          </div>
-        </section>
-      </div>
-    </section>
-  </main>
-  <script src="./config.js"></script>
-  <script src="./app.js"></script>
-</body>
-</html>
+<div class="page hidden" id="scans"><div class="head"><div><h1>Scan History</h1><p>Security assessment activity.</p></div><button class="primary newscan">＋ New Scan</button></div>
+<div class="mini"><div class="card"><span>TOTAL SCANS</span><strong id="statTotalScans">0</strong></div><div class="card"><span>AVERAGE SCORE</span><strong id="statAvgScore">—</strong></div><div class="card"><span>LAST SCAN</span><strong id="statLastScan">—</strong></div></div>
+<div class="card table"><table><thead><tr><th>DOMAIN</th><th>STATUS</th><th>SCORE</th><th>FINDINGS</th><th>DATE</th></tr></thead><tbody id="scansBody"><tr><td colspan="5">Yükleniyor…</td></tr></tbody></table></div></div>
+
+<div class="page hidden" id="findings"><div class="head"><div><h1>Security Findings</h1><p>Prioritized issues from your most recent scans.</p></div></div>
+<div id="findingsBody"><p class="empty">Yükleniyor…</p></div></div>
+
+<div class="page hidden" id="reports"><div class="head"><div><h1>Reports</h1><p>Security assessment reports.</p></div></div>
+<div id="reportsBody"><p class="empty">Yükleniyor…</p></div></div>
+
+<div class="page hidden" id="admin"><div class="head"><div><h1>Admin Overview</h1><p>Platform-wide operational metrics.</p></div></div><div id="adminBody"><p class="empty">Yükleniyor…</p></div></div>
+
+<div class="page hidden" id="settings"><div class="head"><div><h1>Settings</h1><p>Workspace and notification preferences.</p></div></div><div class="settings"><div class="card"><h2>Workspace</h2><label>Organization<input id="settingsOrg" disabled></label><label>Account email<input id="settingsEmail" disabled></label><small class="hint">Bu bilgiler şu an salt-okunur — düzenleme için backend'e bir /api/settings uç noktası eklenmesi gerekiyor.</small></div></div></div>
+
+</section></main></div>
+<div class="modal hidden" id="modal"><div class="modalbox"><button class="close">×</button><div class="modal-logo">C</div><h2>Start a security scan</h2><p>Scan an authorized domain for defensive configuration issues.</p><label>Domain<input id="domain" placeholder="example.com"></label><label class="check"><input id="authorized" type="checkbox"> I confirm I am authorized to scan this domain.</label><button class="primary full" id="start">Start scan</button><small id="status"></small></div></div>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body></html>
