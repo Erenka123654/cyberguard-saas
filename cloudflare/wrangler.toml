@@ -1,11 +1,15 @@
 name = "cyberguard-api"
 main = "worker.js"
-compatibility_date = "2026-08-24"
+compatibility_date = "2026-08-26"
+
+[vars]
+ENVIRONMENT = "production"
+
+# Configure JWT_SECRET and ADMIN_EMAIL as Worker Secrets.
+# D1 binding is configured in the Cloudflare dashboard or by replacing
+# DATABASE_ID below after creating the database.
 
 [[d1_databases]]
 binding = "DB"
 database_name = "cyberguard-db"
-database_id = "eff718ac-6868-423a-b2a5-bda1a8e6ce37"
-
-[vars]
-ENVIRONMENT = "production"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
