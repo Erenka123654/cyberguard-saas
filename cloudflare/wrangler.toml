@@ -9,4 +9,5 @@ database_id = "eff718ac-6868-423a-b2a5-bda1a8e6ce37"
 
 [vars]
 ENVIRONMENT = "production"
-API_ORIGIN = "https://cyberguard-saas-production.up.railway.app"
+# JWT_SECRET buraya YAZILMAZ (gizli anahtar). Deploy'dan sonra şu komutla ekle:
+#   wrangler secret put JWT_SECRET
