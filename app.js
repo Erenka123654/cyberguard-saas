@@ -284,10 +284,7 @@ function renderDomains() {
         <td><b>${d.domain}</b></td>
         <td>${d.authorized ? '<span class="badge green">● Authorized</span>' : '<span class="badge yellow">● Pending</span>'}</td>
         <td>${fmtDate(d.created_at)}</td>
-        <td>
-          <button class="small" data-scan-domain="${d.id}">Scan</button>
-          <button class="small danger" data-delete-domain="${d.id}">Delete</button>
-        </td>
+        <td><button class="small" data-scan-domain="${d.id}">Scan</button></td>
       </tr>`
         )
         .join("")
@@ -305,23 +302,6 @@ function renderDomains() {
         toast(e.message, true);
         btn.disabled = false;
         btn.textContent = "Scan";
-      }
-    };
-  });
-
-  body.querySelectorAll("[data-delete-domain]").forEach((btn) => {
-    btn.onclick = async () => {
-      if (!confirm("Bu domain'i ve ona ait tüm tarama geçmişini silmek istediğine emin misin?")) return;
-      btn.disabled = true;
-      btn.textContent = "…";
-      try {
-        await api("/api/domains/" + btn.dataset.deleteDomain, { method: "DELETE" });
-        toast("Domain silindi.");
-        await loadAll();
-      } catch (e) {
-        toast(e.message, true);
-        btn.disabled = false;
-        btn.textContent = "Delete";
       }
     };
   });
